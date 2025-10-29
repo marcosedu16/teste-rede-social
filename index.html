@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Social | SHΔDØW CORE</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0fcc45;
+            --text: #e6e6e6;
+            --danger: #e94560;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Login Page Styles */
+        #loginPage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #0daa38;
+            transform: translateY(-2px);
+        }
+        
+        .link-text {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .link-text a {
+            color: var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Main App Styles */
+        #mainApp {
+            display: none;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        
+        .feed {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .post-creator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .post-input {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .post {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .post-action {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .widget {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .user-profile {
+            text-align: center;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="container">
+            <div class="login-form">
+                <h2>NEXUS</h2>
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" placeholder="Sua senha">
+                    </div>
+                    <button class="btn" onclick="login()">Entrar</button>
+                    <div class="link-text">
+                        <a onclick="showRegister()">Criar nova conta</a>
+                    </div>
+                </div>
+                
+                <div id="registerForm" class="hidden">
+                    <div class="form-group">
+                        <label for="regName">Nome completo</label>
+                        <input type="text" id="regName" placeholder="Seu nome completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" placeholder="seu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Senha</label>
+                        <input type="password" id="regPassword" placeholder="Senha forte">
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirmar Senha</label>
+                        <input type="password" id="regConfirmPassword" placeholder="Digite novamente">
+                    </div>
+                    <button class="btn" onclick="register()">Criar Conta</button>
+                    <div class="link-text">
+                        <a onclick="showLogin()">Já tenho uma conta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp">
+        <div class="header">
+            <div class="container">
+                <div class="nav">
+                    <div class="logo">NEXUS</div>
+                    <div class="nav-links">
+                        <a href="#" class="active" onclick="showSection('feed')">Feed</a>
+                        <a href="#" onclick="showSection('profile')">Perfil</a>
+                        <a href="#" onclick="showSection('messages')">Mensagens</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="feed">
+                <div class="main-content">
+                    <!-- Post Creator -->
+                    <div class="post-creator">
+                        <textarea class="post-input" id="postContent" placeholder="O que você está pensando?"></textarea>
+                        <button class="btn" onclick="createPost()">Publicar</button>
+                    </div>
+
+                    <!-- Posts Feed -->
+                    <div class="posts-container" id="postsContainer">
+                        <!-- Posts will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <div class="sidebar">
+                    <!-- User Profile Widget -->
+                    <div class="widget user-profile">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <h3 id="userName">Usuário</h3>
+                        <p id="userEmail">usuario@email.com</p>
+                        <button class="logout-btn" onclick="logout()">Sair</button>
+                    </div>
+
+                    <!-- Online Users Widget -->
+                    <div class="widget">
+                        <h3>Online Agora</h3>
+                        <div id="onlineUsers">
+                            <!-- Online users will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cloud Storage Simulation using LocalStorage
+        class ShadowCloud {
+            static setItem(key, value) {
+                localStorage.setItem(`nexus_${key}`, JSON.stringify(value));
+            }
+
+            static getItem(key) {
+                const item = localStorage.getItem(`nexus_${key}`);
+                return item ? JSON.parse(item) : null;
+            }
+
+            static removeItem(key) {
+                localStorage.removeItem(`nexus_${key}`);
+            }
+
+            static clear() {
+                const keys = Object.keys(localStorage);
+                keys.forEach(key => {
+                    if (key.startsWith('nexus_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            }
+        }
+
+        // User Management System
+        class UserSystem {
+            static register(userData) {
+                const users = ShadowCloud.getItem('users') || [];
+                
+                // Check if user already exists
+                if (users.find(u => u.email === userData.email)) {
+                    throw new Error('Usuário já existe');
+                }
+
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: userData.name,
+                    email: userData.email,
+                    password: btoa(userData.password), // Basic encoding
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                ShadowCloud.setItem('users', users);
+                return newUser;
+            }
+
+            static login(email, password) {
+                const users = ShadowCloud.getItem('users') || [];
+                const user = users.find(u => u.email === email && u.password === btoa(password));
+                
+                if (!user) {
+                    throw new Error('Credenciais inválidas');
+                }
+
+                // Update last login
+                user.lastLogin = new Date().toISOString();
+                ShadowCloud.setItem('users', users);
+                ShadowCloud.setItem('currentUser', user);
+                
+                return user;
+            }
+
+            static logout() {
+                ShadowCloud.removeItem('currentUser');
+            }
+
+            static getCurrentUser() {
+                return ShadowCloud.getItem('currentUser');
+            }
+
+            static updateUser(userId, updates) {
+                const users = ShadowCloud.getItem('users') || [];
+                const userIndex = users.findIndex(u => u.id === userId);
+                
+                if (userIndex !== -1) {
+                    users[userIndex] = { ...users[userIndex], ...updates };
+                    ShadowCloud.setItem('users', users);
+                    
+                    // Update current user if it's the same user
+                    const currentUser = ShadowCloud.getItem('currentUser');
+                    if (currentUser && currentUser.id === userId) {
+                        ShadowCloud.setItem('currentUser', users[userIndex]);
+                    }
+                }
+            }
+        }
+
+        // Post Management System
+        class PostSystem {
+            static createPost(content, authorId) {
+                const posts = ShadowCloud.getItem('posts') || [];
+                
+                const newPost = {
+                    id: Date.now().toString(),
+                    content: content,
+                    authorId: authorId,
+                    likes: [],
+                    comments: [],
+                    createdAt: new Date().toISOString(),
+                    likesCount: 0,
+                    commentsCount: 0
+                };
+
+                posts.unshift(newPost); // Add to beginning for feed order
+                ShadowCloud.setItem('posts', posts);
+                return newPost;
+            }
+
+            static getPosts() {
+                return ShadowCloud.getItem('posts') || [];
+            }
+
+            static likePost(postId, userId) {
+                const posts = ShadowCloud.getItem('posts') || [];
+                const postIndex = posts.findIndex(p => p.id === postId);
+                
+                if (postIndex !== -1) {
+                    const post = posts[postIndex];
+                    const likeIndex = post.likes.indexOf(userId);
+                    
+                    if (likeIndex === -1) {
+                        // Add like
+                        post.likes.push(userId);
+                        post.likesCount = post.likes.length;
+                    } else {
+                        // Remove like
+                        post.likes.splice(likeIndex, 1);
+                        post.likesCount = post.likes.length;
+                    }
+                    
+                    ShadowCloud.setItem('posts', posts);
+                    return post;
+                }
+            }
+
+            static addComment(postId, comment, authorId) {
+                const posts = ShadowCloud.getItem('posts') || [];
+                const postIndex = posts.findIndex(p => p.id === postId);
+                
+                if (postIndex !== -1) {
+                    const newComment = {
+                        id: Date.now().toString(),
+                        content: comment,
+                        authorId: authorId,
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    posts[postIndex].comments.push(newComment);
+                    posts[postIndex].commentsCount = posts[postIndex].comments.length;
+                    ShadowCloud.setItem('posts', posts);
+                    return newComment;
+                }
+            }
+        }
+
+        // UI Controller
+        class UIController {
+            static showLogin() {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+            }
+
+            static showRegister() {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+            }
+
+            static showApp() {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                this.loadUserData();
+                this.loadPosts();
+            }
+
+            static showLoginPage() {
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+            }
+
+            static loadUserData() {
+                const user = UserSystem.getCurrentUser();
+                if (user) {
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                }
+            }
+
+            static loadPosts() {
+                const posts = PostSystem.getPosts();
+                const users = ShadowCloud.getItem('users') || [];
+                const container = document.getElementById('postsContainer');
+                
+                container.innerHTML = '';
+
+                posts.forEach(post => {
+                    const author = users.find(u => u.id === post.authorId);
+                    if (!author) return;
+
+                    const postElement = document.createElement('div');
+                    postElement.className = 'post';
+                    postElement.innerHTML = `
+                        <div class="post-header">
+                            <div class="avatar">${author.name.charAt(0).toUpperCase()}</div>
+                            <div>
+                                <strong>${author.name}</strong>
+                                <div style="font-size: 0.8em; opacity: 0.7;">
+                                    ${new Date(post.createdAt).toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            ${post.content}
+                        </div>
+                        <div class="post-actions">
+                            <button class="post-action" onclick="likePost('${post.id}')">
+                                👍 ${post.likesCount || 0}
+                            </button>
+                            <button class="post-action" onclick="commentOnPost('${post.id}')">
+                                💬 ${post.commentsCount || 0}
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(postElement);
+                });
+            }
+
+            static showSection(section) {
+                // Update active nav link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.target.classList.add('active');
+
+                // Here you would implement section switching logic
+                alert(`Seção ${section} será implementada na próxima versão`);
+            }
+        }
+
+        // Global Functions for HTML onclick events
+        function showLogin() {
+            UIController.showLogin();
+        }
+
+        function showRegister() {
+            UIController.showRegister();
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                UserSystem.login(email, password);
+                UIController.showApp();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function register() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Senhas não coincidem');
+                return;
+            }
+
+            try {
+                UserSystem.register({ name, email, password });
+                alert('Conta criada com sucesso! Faça login.');
+                UIController.showLogin();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function logout() {
+            UserSystem.logout();
+            UIController.showLoginPage();
+        }
+
+        function createPost() {
+            const content = document.getElementById('postContent').value;
+            const user = UserSystem.getCurrentUser();
+
+            if (!content.trim()) {
+                alert('Digite algo para publicar');
+                return;
+            }
+
+            if (!user) {
+                alert('Usuário não autenticado');
+                return;
+            }
+
+            PostSystem.createPost(content, user.id);
+            document.getElementById('postContent').value = '';
+            UIController.loadPosts();
+        }
+
+        function likePost(postId) {
+            const user = UserSystem.getCurrentUser();
+            if (!user) {
+                alert('Faça login para curtir posts');
+                return;
+            }
+
+            PostSystem.likePost(postId, user.id);
+            UIController.loadPosts();
+        }
+
+        function commentOnPost(postId) {
+            const comment = prompt('Digite seu comentário:');
+            const user = UserSystem.getCurrentUser();
+
+            if (comment && user) {
+                PostSystem.addComment(postId, comment, user.id);
+                UIController.loadPosts();
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = UserSystem.getCurrentUser();
+            if (user) {
+                UIController.showApp();
+            } else {
+                UIController.showLoginPage();
+            }
+        });
+    </script>
+</body>
+</html>
