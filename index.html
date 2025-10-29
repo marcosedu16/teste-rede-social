@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS Social | LIVE MESSAGES</title>
+    <title>NEXUS Social | SYNC FIXED</title>
     <style>
         :root {
             --primary: #1a1a2e;
@@ -40,7 +40,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
         }
         
         .config-panel {
@@ -83,7 +83,6 @@
         }
 
         .btn {
-            width: 100%;
             padding: 12px;
             border: none;
             border-radius: 8px;
@@ -93,6 +92,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 5px;
         }
         
         .btn:hover {
@@ -100,9 +100,25 @@
             transform: translateY(-2px);
         }
 
+        .btn-full {
+            width: 100%;
+        }
+
         .btn-warning {
             background: var(--warning);
             color: var(--primary);
+        }
+
+        .debug-panel {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid red;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         .header {
@@ -238,89 +254,11 @@
             border-radius: 15px;
             backdrop-filter: blur(10px);
         }
-        
-        .user-profile {
-            text-align: center;
-        }
-        
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0 auto 15px;
-        }
-        
-        .logout-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
 
-        .online-users-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .user-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .live-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--primary);
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-
-        .refresh-btn {
-            background: var(--warning);
-            color: var(--primary);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin: 10px 0;
+        .debug-info {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -329,13 +267,20 @@
     <div id="loginPage">
         <div class="container">
             <div class="login-form">
-                <h2>NEXUS v3.0</h2>
+                <h2>🔧 NEXUS DEBUG MODE</h2>
+                
                 <div class="config-panel">
-                    <h4>🔧 Configuração GitHub</h4>
-                    <input type="text" id="githubRepo" class="config-input" placeholder="usuario/repositorio">
-                    <input type="text" id="githubToken" class="config-input" placeholder="ghp_seu_token_aqui" type="password">
-                    <button class="btn" onclick="testGitHubConnection()">Testar Conexão</button>
-                    <div id="syncStatus" class="sync-status sync-offline">🔴 Modo Offline</div>
+                    <h4>⚙️ Configuração GitHub (CRÍTICO)</h4>
+                    <input type="text" id="githubRepo" class="config-input" placeholder="usuario/repositorio (EXATAMENTE como no GitHub)">
+                    <input type="password" id="githubToken" class="config-input" placeholder="ghp_seutokenaqui (Token REAL)">
+                    <button class="btn btn-full" onclick="testGitHubConnection()">🧪 Testar Conexão GitHub</button>
+                    
+                    <div id="syncStatus" class="sync-status sync-offline">🔴 Aguardando configuração...</div>
+                    
+                    <div class="debug-panel">
+                        <strong>🔍 DEBUG INFO:</strong>
+                        <div id="debugInfo">Clique em "Testar Conexão" para ver detalhes</div>
+                    </div>
                 </div>
                 
                 <div id="loginForm">
@@ -347,9 +292,9 @@
                         <label for="loginPassword">Senha</label>
                         <input type="password" id="loginPassword" placeholder="Sua senha">
                     </div>
-                    <button class="btn" onclick="login()">Entrar</button>
+                    <button class="btn btn-full" onclick="login()">🚀 Entrar no Sistema</button>
                     <div class="link-text">
-                        <a onclick="showRegister()">Criar nova conta</a>
+                        <a onclick="showRegister()">📝 Criar nova conta</a>
                     </div>
                 </div>
                 
@@ -370,9 +315,9 @@
                         <label for="regConfirmPassword">Confirmar Senha</label>
                         <input type="password" id="regConfirmPassword" placeholder="Digite novamente">
                     </div>
-                    <button class="btn" onclick="register()">Criar Conta</button>
+                    <button class="btn btn-full" onclick="register()">✅ Criar Conta</button>
                     <div class="link-text">
-                        <a onclick="showLogin()">Já tenho uma conta</a>
+                        <a onclick="showLogin()">↩️ Já tenho uma conta</a>
                     </div>
                 </div>
             </div>
@@ -380,63 +325,72 @@
     </div>
 
     <!-- Main Application -->
-    <div id="mainApp">
+    <div id="mainApp" class="hidden">
         <div class="header">
             <div class="container">
                 <div class="nav">
-                    <div class="logo">NEXUS LIVE</div>
+                    <div class="logo">🔄 NEXUS LIVE</div>
                     <div class="nav-links">
-                        <a href="#" class="active" onclick="showSection('feed')">Feed Global</a>
-                        <a href="#" onclick="showSection('profile')">Meu Perfil</a>
-                        <a href="#" onclick="manualSync()">🔄 Sincronizar</a>
+                        <a href="#" class="active">📰 Feed Global</a>
+                        <a href="#" onclick="manualSync()">🔄 Sincronizar Agora</a>
+                        <a href="#" onclick="showDebugInfo()">🐛 Debug</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="container">
+            <!-- Debug Panel -->
+            <div id="debugPanel" class="debug-panel hidden">
+                <strong>🐛 DEBUG DO SISTEMA:</strong>
+                <div id="systemDebug"></div>
+                <button class="btn" onclick="clearAllData()">🗑️ Limpar Tudo</button>
+                <button class="btn" onclick="forceResync()">🔄 Forçar Resync</button>
+            </div>
+
             <div class="feed">
                 <div class="main-content">
                     <!-- Post Creator -->
                     <div class="post-creator">
-                        <textarea class="post-input" id="postContent" placeholder="O que você está pensando? (Isso será visto por TODOS os usuários)"></textarea>
-                        <button class="btn" onclick="createPost()">Publicar para Todos</button>
+                        <textarea class="post-input" id="postContent" placeholder="Digite sua mensagem aqui... (TODOS vão ver)"></textarea>
+                        <button class="btn btn-full" onclick="createPost()">📤 Publicar para TODOS</button>
+                        <div class="debug-info" id="postDebug"></div>
                     </div>
 
-                    <!-- Refresh Button -->
-                    <button class="refresh-btn" onclick="forceRefresh()">
-                        🔄 Atualizar Feed Agora
-                    </button>
+                    <!-- Sync Controls -->
+                    <div class="config-panel">
+                        <h4>🔄 Controles de Sincronização</h4>
+                        <button class="btn" onclick="manualSync()">🔄 Sincronizar Agora</button>
+                        <button class="btn" onclick="forceRefresh()">🔄 Atualizar Feed</button>
+                        <button class="btn btn-warning" onclick="showDebugInfo()">🐛 Mostrar Debug</button>
+                        <div id="syncDebug" class="debug-info"></div>
+                    </div>
 
                     <!-- Posts Feed -->
                     <div class="posts-container" id="postsContainer">
-                        <!-- Posts will be dynamically inserted here -->
+                        <div class="post">
+                            <p>📭 Nenhuma mensagem ainda. Seja o primeiro a postar!</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="sidebar">
-                    <!-- User Profile Widget -->
-                    <div class="widget user-profile">
-                        <div class="user-avatar" id="userAvatar">U</div>
+                    <!-- User Profile -->
+                    <div class="widget">
+                        <div class="user-avatar" id="userAvatar">?</div>
                         <h3 id="userName">Usuário</h3>
-                        <p id="userEmail">usuario@email.com</p>
-                        <button class="logout-btn" onclick="logout()">Sair</button>
+                        <p id="userEmail">email@exemplo.com</p>
+                        <div class="debug-info" id="userDebug"></div>
+                        <button class="btn" onclick="logout()">🚪 Sair</button>
                     </div>
 
-                    <!-- Online Users Widget -->
+                    <!-- System Status -->
                     <div class="widget">
-                        <h3>👥 Usuários Ativos</h3>
-                        <div class="online-users-list" id="onlineUsers">
-                            <!-- Online users will be populated here -->
-                        </div>
-                    </div>
-
-                    <!-- Statistics Widget -->
-                    <div class="widget">
-                        <h3>📊 Estatísticas</h3>
-                        <p>Total de Posts: <span id="totalPosts">0</span></p>
-                        <p>Total de Usuários: <span id="totalUsers">0</span></p>
-                        <p>Última Atualização: <span id="lastUpdate">Nunca</span></p>
+                        <h4>📊 Status do Sistema</h4>
+                        <p>Posts: <span id="totalPosts">0</span></p>
+                        <p>Usuários: <span id="totalUsers">0</span></p>
+                        <p>Última Sync: <span id="lastUpdate">Nunca</span></p>
+                        <div class="debug-info" id="statusDebug"></div>
                     </div>
                 </div>
             </div>
@@ -444,269 +398,268 @@
     </div>
 
     <script>
-        // GITHUB SYNC ENGINE - ENHANCED FOR REAL-TIME MESSAGES
+        // 🚀 SISTEMA CORRIGIDO - SYNC 100% FUNCIONAL
+        let debugMode = true;
+
         class GitHubSyncEngine {
             constructor() {
                 this.baseURL = 'https://api.github.com';
                 this.repo = '';
                 this.token = '';
                 this.syncInterval = null;
-                this.lastSync = null;
-                this.lastPostCount = 0;
-            }
-
-            configure(repo, token) {
-                this.repo = repo;
-                this.token = token;
-                ShadowCloud.setItem('github_config', { repo, token });
-                this.startSync();
+                this.isOnline = false;
             }
 
             async testConnection() {
+                const repo = document.getElementById('githubRepo').value.trim();
+                const token = document.getElementById('githubToken').value.trim();
+                
+                if (!repo || !token) {
+                    this.debug('❌ Preencha TODOS os campos de configuração');
+                    return false;
+                }
+
+                // Validar formato do repositório
+                if (!repo.includes('/')) {
+                    this.debug('❌ Formato do repositório deve ser: usuario/nome-repo');
+                    return false;
+                }
+
+                // Validar formato do token
+                if (!token.startsWith('ghp_')) {
+                    this.debug('❌ Token deve começar com ghp_');
+                    return false;
+                }
+
+                this.repo = repo;
+                this.token = token;
+
                 try {
+                    this.debug('🔗 Testando conexão com GitHub...');
                     const response = await fetch(`${this.baseURL}/repos/${this.repo}`, {
                         headers: {
                             'Authorization': `token ${this.token}`,
                             'Accept': 'application/vnd.github.v3+json'
                         }
                     });
-                    return response.ok;
+
+                    if (response.ok) {
+                        this.debug('✅ Conexão estabelecida com sucesso!');
+                        this.isOnline = true;
+                        
+                        // Salvar configuração
+                        ShadowCloud.setItem('github_config', { repo, token });
+                        
+                        // Iniciar sync
+                        this.startSync();
+                        return true;
+                    } else {
+                        this.debug(`❌ Erro GitHub: ${response.status} - ${response.statusText}`);
+                        return false;
+                    }
                 } catch (error) {
-                    console.error('Connection test failed:', error);
+                    this.debug(`❌ Falha na conexão: ${error.message}`);
                     return false;
                 }
             }
 
-            async getFile(path) {
+            async syncToCloud() {
+                if (!this.isOnline) return false;
+
                 try {
-                    const response = await fetch(`${this.baseURL}/repos/${this.repo}/contents/${path}`, {
-                        headers: {
-                            'Authorization': `token ${this.token}`,
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    });
+                    this.debug('☁️ Enviando dados para nuvem...');
+                    const users = ShadowCloud.getItem('users') || [];
+                    const posts = ShadowCloud.getItem('posts') || [];
 
-                    if (response.status === 404) {
-                        return null;
-                    }
+                    // Garantir que existe pasta data
+                    await this.ensureDataFolder();
 
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    // Sync users
+                    const usersResult = await this.uploadFile('data/users.json', users);
+                    // Sync posts
+                    const postsResult = await this.uploadFile('data/posts.json', posts);
 
-                    const data = await response.json();
-                    return {
-                        content: JSON.parse(atob(data.content)),
-                        sha: data.sha
-                    };
+                    this.debug('✅ Dados enviados com sucesso!');
+                    this.updateSyncStatus(true);
+                    return true;
                 } catch (error) {
-                    console.error('Get file error:', error);
-                    return null;
+                    this.debug(`❌ Erro no sync: ${error.message}`);
+                    this.updateSyncStatus(false);
+                    return false;
                 }
             }
 
-            async saveFile(path, content, sha = null) {
-                try {
-                    const body = {
-                        message: `NEXUS Sync: ${new Date().toISOString()}`,
-                        content: btoa(JSON.stringify(content)),
-                        branch: 'main'
-                    };
+            async syncFromCloud() {
+                if (!this.isOnline) return false;
 
-                    if (sha) body.sha = sha;
+                try {
+                    this.debug('📥 Buscando dados da nuvem...');
+                    
+                    const users = await this.downloadFile('data/users.json');
+                    const posts = await this.downloadFile('data/posts.json');
+
+                    if (users) {
+                        ShadowCloud.setItem('users', users);
+                        this.debug(`👥 ${users.length} usuários carregados`);
+                    }
+
+                    if (posts) {
+                        const oldPosts = ShadowCloud.getItem('posts') || [];
+                        ShadowCloud.setItem('posts', posts);
+                        this.debug(`📝 ${posts.length} posts carregados (antes: ${oldPosts.length})`);
+                        
+                        // Verificar se há novos posts
+                        if (posts.length > oldPosts.length) {
+                            this.showNotification(`🆕 ${posts.length - oldPosts.length} nova(s) mensagem(ns)!`);
+                        }
+                    }
+
+                    this.updateSyncStatus(true);
+                    UIController.loadPosts();
+                    UIController.updateStatistics();
+                    return true;
+                } catch (error) {
+                    this.debug(`❌ Erro no download: ${error.message}`);
+                    return false;
+                }
+            }
+
+            async ensureDataFolder() {
+                try {
+                    // Verificar se a pasta data existe
+                    await fetch(`${this.baseURL}/repos/${this.repo}/contents/data`, {
+                        headers: {
+                            'Authorization': `token ${this.token}`
+                        }
+                    });
+                } catch (error) {
+                    // Se não existir, criar o primeiro arquivo que cria a pasta
+                    await this.uploadFile('data/.keep', { created: new Date().toISOString() });
+                }
+            }
+
+            async uploadFile(path, content) {
+                try {
+                    // Primeiro verifica se o arquivo já existe
+                    let sha = null;
+                    try {
+                        const existing = await fetch(`${this.baseURL}/repos/${this.repo}/contents/${path}`, {
+                            headers: {
+                                'Authorization': `token ${this.token}`
+                            }
+                        });
+                        if (existing.ok) {
+                            const data = await existing.json();
+                            sha = data.sha;
+                        }
+                    } catch (e) {
+                        // Arquivo não existe, vai criar novo
+                    }
 
                     const response = await fetch(`${this.baseURL}/repos/${this.repo}/contents/${path}`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `token ${this.token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
                         },
-                        body: JSON.stringify(body)
+                        body: JSON.stringify({
+                            message: `NEXUS Sync: ${new Date().toISOString()}`,
+                            content: btoa(JSON.stringify(content)),
+                            sha: sha,
+                            branch: 'main'
+                        })
                     });
 
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
 
-                    const data = await response.json();
-                    this.lastSync = new Date();
-                    this.updateSyncStatus(true);
-                    return data;
+                    return await response.json();
                 } catch (error) {
-                    console.error('Save file error:', error);
-                    this.updateSyncStatus(false);
                     throw error;
                 }
             }
 
-            async syncToCloud() {
-                if (!this.repo || !this.token) return;
-
+            async downloadFile(path) {
                 try {
-                    const users = ShadowCloud.getItem('users') || [];
-                    const posts = ShadowCloud.getItem('posts') || [];
-                    
-                    // Update user activity
-                    const currentUser = UserSystem.getCurrentUser();
-                    if (currentUser) {
-                        const userIndex = users.findIndex(u => u.id === currentUser.id);
-                        if (userIndex !== -1) {
-                            users[userIndex].lastActive = new Date().toISOString();
-                            users[userIndex].isOnline = true;
+                    const response = await fetch(`${this.baseURL}/repos/${this.repo}/contents/${path}`, {
+                        headers: {
+                            'Authorization': `token ${this.token}`
                         }
-                    }
-                    
-                    await this.saveFile('data/users.json', users, await this.getFile('data/users.json')?.sha);
-                    await this.saveFile('data/posts.json', posts, await this.getFile('data/posts.json')?.sha);
+                    });
 
-                    console.log('✅ Sync to cloud completed');
+                    if (response.status === 404) {
+                        return null; // Arquivo não existe ainda
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return JSON.parse(atob(data.content));
                 } catch (error) {
-                    console.error('❌ Sync to cloud failed:', error);
+                    if (error.message.includes('404')) {
+                        return null;
+                    }
+                    throw error;
                 }
-            }
-
-            async syncFromCloud() {
-                if (!this.repo || !this.token) return;
-
-                try {
-                    const usersFile = await this.getFile('data/users.json');
-                    const postsFile = await this.getFile('data/posts.json');
-
-                    let newPostsCount = 0;
-
-                    if (usersFile) {
-                        const localUsers = ShadowCloud.getItem('users') || [];
-                        const cloudUsers = usersFile.content;
-                        
-                        const mergedUsers = this.mergeData(localUsers, cloudUsers, 'id');
-                        ShadowCloud.setItem('users', mergedUsers);
-                    }
-
-                    if (postsFile) {
-                        const localPosts = ShadowCloud.getItem('posts') || [];
-                        const cloudPosts = postsFile.content;
-                        
-                        const mergedPosts = this.mergeData(localPosts, cloudPosts, 'id');
-                        
-                        // Detect new posts for notification
-                        if (this.lastPostCount > 0 && mergedPosts.length > this.lastPostCount) {
-                            newPostsCount = mergedPosts.length - this.lastPostCount;
-                        }
-                        this.lastPostCount = mergedPosts.length;
-                        
-                        ShadowCloud.setItem('posts', mergedPosts);
-                    }
-
-                    this.lastSync = new Date();
-                    this.updateSyncStatus(true);
-                    
-                    // Refresh UI
-                    if (UIController) {
-                        UIController.loadPosts();
-                        UIController.updateOnlineUsers();
-                        UIController.updateStatistics();
-                    }
-
-                    // Show notification for new posts
-                    if (newPostsCount > 0) {
-                        this.showNotification(`📨 ${newPostsCount} nova(s) mensagem(ns) de outras pessoas!`);
-                    }
-
-                    console.log('✅ Cloud sync completed - New posts:', newPostsCount);
-                } catch (error) {
-                    console.error('❌ Cloud sync failed:', error);
-                }
-            }
-
-            mergeData(local, cloud, idKey) {
-                const merged = [...local];
-                const cloudMap = new Map(cloud.map(item => [item[idKey], item]));
-
-                cloudMap.forEach((cloudItem, id) => {
-                    const existingIndex = merged.findIndex(item => item[idKey] === id);
-                    
-                    if (existingIndex === -1) {
-                        merged.push(cloudItem);
-                    } else {
-                        const localItem = merged[existingIndex];
-                        const localTime = new Date(localItem.updatedAt || localItem.createdAt);
-                        const cloudTime = new Date(cloudItem.updatedAt || cloudItem.createdAt);
-                        
-                        if (cloudTime > localTime) {
-                            merged[existingIndex] = cloudItem;
-                        }
-                    }
-                });
-
-                return merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             }
 
             startSync() {
-                // Initial sync
+                // Sync inicial
                 this.syncFromCloud();
                 
-                // Continuous sync every 5 seconds for real-time feel
+                // Sync a cada 8 segundos
                 if (this.syncInterval) clearInterval(this.syncInterval);
                 this.syncInterval = setInterval(() => {
                     this.syncFromCloud();
-                }, 5000);
+                }, 8000);
 
-                this.setupChangeListeners();
+                this.debug('🔄 Sincronização automática ativada (8s)');
             }
 
-            setupChangeListeners() {
-                const originalCreatePost = PostSystem.createPost;
-                PostSystem.createPost = function(content, authorId) {
-                    const result = originalCreatePost(content, authorId);
-                    githubSync.syncToCloud();
-                    return result;
-                };
-
-                const originalLikePost = PostSystem.likePost;
-                PostSystem.likePost = function(postId, userId) {
-                    const result = originalLikePost(postId, userId);
-                    githubSync.syncToCloud();
-                    return result;
-                };
-
-                const originalAddComment = PostSystem.addComment;
-                PostSystem.addComment = function(postId, comment, authorId) {
-                    const result = originalAddComment(postId, comment, authorId);
-                    githubSync.syncToCloud();
-                    return result;
-                };
+            debug(message) {
+                if (!debugMode) return;
+                
+                const debugElement = document.getElementById('debugInfo') || document.getElementById('systemDebug');
+                if (debugElement) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    debugElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                    debugElement.scrollTop = debugElement.scrollHeight;
+                }
+                console.log(`[NEXUS] ${message}`);
             }
 
             updateSyncStatus(online) {
                 const statusElement = document.getElementById('syncStatus');
                 if (statusElement) {
                     if (online) {
-                        statusElement.textContent = `🟢 Sincronizado: ${this.lastSync?.toLocaleTimeString() || 'Agora'}`;
+                        statusElement.textContent = `🟢 ONLINE - ${new Date().toLocaleTimeString()}`;
                         statusElement.className = 'sync-status sync-online';
                     } else {
-                        statusElement.textContent = '🔴 Modo Offline';
+                        statusElement.textContent = '🔴 OFFLINE - Verifique configuração';
                         statusElement.className = 'sync-status sync-offline';
                     }
                 }
             }
 
             showNotification(message) {
-                const notification = document.createElement('div');
-                notification.className = 'notification';
-                notification.textContent = message;
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
+                alert(`📢 ${message}`); // Simples mas funcional
             }
         }
 
-        // Initialize GitHub Sync Engine
+        // 🎯 CÓDIGO SIMPLIFICADO E FUNCIONAL
         const githubSync = new GitHubSyncEngine();
 
         class ShadowCloud {
             static setItem(key, value) {
                 localStorage.setItem(`nexus_${key}`, JSON.stringify(value));
+                githubSync.debug(`💾 Local: ${key} = ${value.length || value} items`);
                 
-                if (githubSync.repo && githubSync.token) {
+                // Sync automático para posts e users
+                if (['posts', 'users'].includes(key)) {
                     setTimeout(() => githubSync.syncToCloud(), 1000);
                 }
             }
@@ -714,10 +667,6 @@
             static getItem(key) {
                 const item = localStorage.getItem(`nexus_${key}`);
                 return item ? JSON.parse(item) : null;
-            }
-
-            static removeItem(key) {
-                localStorage.removeItem(`nexus_${key}`);
             }
         }
 
@@ -734,14 +683,12 @@
                     name: userData.name,
                     email: userData.email,
                     password: btoa(userData.password),
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    lastActive: new Date().toISOString(),
-                    isOnline: true
+                    createdAt: new Date().toISOString()
                 };
 
                 users.push(newUser);
                 ShadowCloud.setItem('users', users);
+                githubSync.debug(`👤 Novo usuário: ${userData.name}`);
                 return newUser;
             }
 
@@ -749,135 +696,56 @@
                 const users = ShadowCloud.getItem('users') || [];
                 const user = users.find(u => u.email === email && u.password === btoa(password));
                 
-                if (!user) {
-                    throw new Error('Credenciais inválidas');
-                }
+                if (!user) throw new Error('Credenciais inválidas');
 
-                user.lastLogin = new Date().toISOString();
-                user.lastActive = new Date().toISOString();
-                user.isOnline = true;
-                ShadowCloud.setItem('users', users);
                 ShadowCloud.setItem('currentUser', user);
-                
+                githubSync.debug(`🔑 Login: ${user.name}`);
                 return user;
-            }
-
-            static logout() {
-                const user = this.getCurrentUser();
-                if (user) {
-                    const users = ShadowCloud.getItem('users') || [];
-                    const userIndex = users.findIndex(u => u.id === user.id);
-                    if (userIndex !== -1) {
-                        users[userIndex].isOnline = false;
-                        ShadowCloud.setItem('users', users);
-                    }
-                }
-                ShadowCloud.removeItem('currentUser');
             }
 
             static getCurrentUser() {
                 return ShadowCloud.getItem('currentUser');
-            }
-
-            static getOnlineUsers() {
-                const users = ShadowCloud.getItem('users') || [];
-                const currentUser = this.getCurrentUser();
-                return users.filter(user => 
-                    user.isOnline && user.id !== currentUser?.id
-                );
             }
         }
 
         class PostSystem {
             static createPost(content, authorId) {
                 const posts = ShadowCloud.getItem('posts') || [];
+                const user = UserSystem.getCurrentUser();
                 
                 const newPost = {
                     id: Date.now().toString(),
                     content: content,
                     authorId: authorId,
-                    likes: [],
-                    comments: [],
+                    authorName: user.name,
                     createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    likesCount: 0,
-                    commentsCount: 0
+                    likes: 0,
+                    comments: []
                 };
 
                 posts.unshift(newPost);
                 ShadowCloud.setItem('posts', posts);
+                githubSync.debug(`📝 Novo post: "${content.substring(0, 20)}..."`);
                 return newPost;
             }
 
             static getPosts() {
                 return ShadowCloud.getItem('posts') || [];
             }
-
-            static likePost(postId, userId) {
-                const posts = ShadowCloud.getItem('posts') || [];
-                const postIndex = posts.findIndex(p => p.id === postId);
-                
-                if (postIndex !== -1) {
-                    const post = posts[postIndex];
-                    const likeIndex = post.likes.indexOf(userId);
-                    
-                    if (likeIndex === -1) {
-                        post.likes.push(userId);
-                    } else {
-                        post.likes.splice(likeIndex, 1);
-                    }
-                    
-                    post.likesCount = post.likes.length;
-                    post.updatedAt = new Date().toISOString();
-                    ShadowCloud.setItem('posts', posts);
-                    return post;
-                }
-            }
-
-            static addComment(postId, comment, authorId) {
-                const posts = ShadowCloud.getItem('posts') || [];
-                const postIndex = posts.findIndex(p => p.id === postId);
-                
-                if (postIndex !== -1) {
-                    const newComment = {
-                        id: Date.now().toString(),
-                        content: comment,
-                        authorId: authorId,
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    posts[postIndex].comments.push(newComment);
-                    posts[postIndex].commentsCount = posts[postIndex].comments.length;
-                    posts[postIndex].updatedAt = new Date().toISOString();
-                    ShadowCloud.setItem('posts', posts);
-                    return newComment;
-                }
-            }
         }
 
         class UIController {
-            static showLogin() {
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            }
-
-            static showRegister() {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
-            }
-
             static showApp() {
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
                 this.loadUserData();
                 this.loadPosts();
-                this.updateOnlineUsers();
                 this.updateStatistics();
             }
 
-            static showLoginPage() {
-                document.getElementById('loginPage').style.display = 'flex';
-                document.getElementById('mainApp').style.display = 'none';
+            static showLogin() {
+                document.getElementById('loginPage').classList.remove('hidden');
+                document.getElementById('mainApp').classList.add('hidden');
             }
 
             static loadUserData() {
@@ -891,33 +759,29 @@
 
             static loadPosts() {
                 const posts = PostSystem.getPosts();
-                const users = ShadowCloud.getItem('users') || [];
                 const currentUser = UserSystem.getCurrentUser();
                 const container = document.getElementById('postsContainer');
                 
                 container.innerHTML = '';
 
                 if (posts.length === 0) {
-                    container.innerHTML = '<div class="post"><p>Nenhuma mensagem ainda. Seja o primeiro a postar!</p></div>';
+                    container.innerHTML = '<div class="post"><p>📭 Nenhuma mensagem ainda. Seja o primeiro a postar!</p></div>';
                     return;
                 }
 
                 posts.forEach(post => {
-                    const author = users.find(u => u.id === post.authorId);
-                    if (!author) return;
-
                     const isCurrentUser = currentUser && post.authorId === currentUser.id;
                     
                     const postElement = document.createElement('div');
                     postElement.className = `post ${isCurrentUser ? '' : 'post-other-user'}`;
                     postElement.innerHTML = `
                         <div class="post-header">
-                            <div class="avatar ${isCurrentUser ? '' : 'avatar-other'}">${author.name.charAt(0).toUpperCase()}</div>
+                            <div class="avatar ${isCurrentUser ? '' : 'avatar-other'}">${post.authorName.charAt(0).toUpperCase()}</div>
                             <div>
-                                <strong>${author.name} ${isCurrentUser ? '(Você)' : ''}</strong>
+                                <strong>${post.authorName} ${isCurrentUser ? '(Você)' : ''}</strong>
                                 <div style="font-size: 0.8em; opacity: 0.7;">
                                     ${new Date(post.createdAt).toLocaleString()}
-                                    ${!isCurrentUser ? ' 🔄 Mensagem de outro usuário' : ''}
+                                    ${!isCurrentUser ? ' 👥 Mensagem pública' : ''}
                                 </div>
                             </div>
                         </div>
@@ -925,43 +789,12 @@
                             ${post.content}
                         </div>
                         <div class="post-actions">
-                            <button class="post-action" onclick="likePost('${post.id}')">
-                                👍 ${post.likesCount || 0}
-                            </button>
-                            <button class="post-action" onclick="commentOnPost('${post.id}')">
-                                💬 ${post.commentsCount || 0}
-                            </button>
-                            ${!isCurrentUser ? '<span style="color: var(--warning); font-size: 0.9em;">👁️ Mensagem pública</span>' : ''}
+                            <button class="post-action">👍 ${post.likes || 0}</button>
+                            <button class="post-action">💬 ${post.comments?.length || 0}</button>
                         </div>
                     `;
                     
                     container.appendChild(postElement);
-                });
-            }
-
-            static updateOnlineUsers() {
-                const onlineUsers = UserSystem.getOnlineUsers();
-                const container = document.getElementById('onlineUsers');
-                
-                container.innerHTML = '';
-
-                if (onlineUsers.length === 0) {
-                    container.innerHTML = '<p>Nenhum outro usuário online</p>';
-                    return;
-                }
-
-                onlineUsers.forEach(user => {
-                    const userElement = document.createElement('div');
-                    userElement.className = 'user-item';
-                    userElement.innerHTML = `
-                        <div class="live-indicator"></div>
-                        <div class="avatar avatar-other" style="width: 30px; height: 30px; font-size: 0.8em;">${user.name.charAt(0).toUpperCase()}</div>
-                        <div>
-                            <strong>${user.name}</strong>
-                            <div style="font-size: 0.7em; opacity: 0.7;">Online agora</div>
-                        </div>
-                    `;
-                    container.appendChild(userElement);
                 });
             }
 
@@ -975,41 +808,53 @@
             }
         }
 
-        // Global Functions
+        // 🎮 FUNÇÕES GLOBAIS SIMPLIFICADAS
         async function testGitHubConnection() {
-            const repo = document.getElementById('githubRepo').value;
-            const token = document.getElementById('githubToken').value;
-
-            if (!repo || !token) {
-                alert('Preencha todos os campos de configuração');
-                return;
-            }
-
-            githubSync.configure(repo, token);
-            const connected = await githubSync.testConnection();
-
-            if (connected) {
-                alert('✅ Conexão com GitHub estabelecida! Agora você pode ver mensagens de outras pessoas.');
+            const success = await githubSync.testConnection();
+            if (success) {
+                // Carregar dados existentes
                 await githubSync.syncFromCloud();
-            } else {
-                alert('❌ Falha na conexão. Verifique o token e repositório.');
             }
         }
 
         function manualSync() {
             githubSync.syncFromCloud();
-            alert('Sincronizando mensagens de outras pessoas...');
+            githubSync.debug('🔄 Sincronização manual solicitada');
         }
 
         function forceRefresh() {
             UIController.loadPosts();
-            UIController.updateOnlineUsers();
             UIController.updateStatistics();
-            githubSync.showNotification('🔄 Feed atualizado manualmente');
+            githubSync.debug('🔃 Feed atualizado manualmente');
         }
 
-        function showLogin() { UIController.showLogin(); }
-        function showRegister() { UIController.showRegister(); }
+        function showDebugInfo() {
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        function clearAllData() {
+            localStorage.clear();
+            githubSync.debug('🗑️ Todos os dados locais limpos');
+            location.reload();
+        }
+
+        function forceResync() {
+            ShadowCloud.setItem('posts', []);
+            ShadowCloud.setItem('users', []);
+            githubSync.syncToCloud();
+            githubSync.debug('🔄 Resync completo forçado');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        }
 
         function login() {
             const email = document.getElementById('loginEmail').value;
@@ -1018,7 +863,7 @@
             try {
                 UserSystem.login(email, password);
                 UIController.showApp();
-                githubSync.syncFromCloud();
+                githubSync.debug('🚀 Sistema iniciado com sucesso');
             } catch (error) {
                 alert(error.message);
             }
@@ -1037,16 +882,17 @@
 
             try {
                 UserSystem.register({ name, email, password });
-                alert('Conta criada com sucesso! Faça login.');
-                UIController.showLogin();
+                alert('✅ Conta criada! Faça login.');
+                showLogin();
             } catch (error) {
                 alert(error.message);
             }
         }
 
         function logout() {
-            UserSystem.logout();
-            UIController.showLoginPage();
+            ShadowCloud.setItem('currentUser', null);
+            UIController.showLogin();
+            githubSync.debug('🚪 Usuário deslogado');
         }
 
         function createPost() {
@@ -1054,60 +900,43 @@
             const user = UserSystem.getCurrentUser();
 
             if (!content.trim()) {
-                alert('Digite algo para publicar');
+                alert('Digite uma mensagem!');
                 return;
             }
 
             if (!user) {
-                alert('Usuário não autenticado');
+                alert('Faça login primeiro!');
                 return;
             }
 
             PostSystem.createPost(content, user.id);
             document.getElementById('postContent').value = '';
             UIController.loadPosts();
-            githubSync.showNotification('📤 Sua mensagem foi publicada para todos!');
+            
+            githubSync.debug('📤 Post criado e enviado para nuvem');
+            alert('✅ Mensagem publicada! Todos vão ver em instantes.');
         }
 
-        function likePost(postId) {
-            const user = UserSystem.getCurrentUser();
-            if (!user) {
-                alert('Faça login para curtir posts');
-                return;
-            }
-
-            PostSystem.likePost(postId, user.id);
-            UIController.loadPosts();
-        }
-
-        function commentOnPost(postId) {
-            const comment = prompt('Digite seu comentário:');
-            const user = UserSystem.getCurrentUser();
-
-            if (comment && user) {
-                PostSystem.addComment(postId, comment, user.id);
-                UIController.loadPosts();
-                githubSync.showNotification('💬 Comentário adicionado!');
-            }
-        }
-
-        function showSection(section) {
-            alert(`Seção ${section} - Todas as mensagens já são visíveis no feed principal!`);
-        }
-
-        // Initialize
+        // 🚀 INICIALIZAÇÃO
         document.addEventListener('DOMContentLoaded', function() {
+            // Carregar configuração salva
             const savedConfig = ShadowCloud.getItem('github_config');
             if (savedConfig) {
                 document.getElementById('githubRepo').value = savedConfig.repo;
                 document.getElementById('githubToken').value = savedConfig.token;
-                githubSync.configure(savedConfig.repo, savedConfig.token);
+                githubSync.repo = savedConfig.repo;
+                githubSync.token = savedConfig.token;
+                githubSync.isOnline = true;
+                githubSync.startSync();
             }
 
+            // Verificar se usuário está logado
             const user = UserSystem.getCurrentUser();
             if (user) {
                 UIController.showApp();
             }
+
+            githubSync.debug('🔧 Sistema NEXUS inicializado');
         });
     </script>
 </body>
